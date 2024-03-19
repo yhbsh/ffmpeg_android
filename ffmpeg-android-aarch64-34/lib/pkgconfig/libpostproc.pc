@@ -1,0 +1,14 @@
+prefix=/Users/home/dev/c/ffmpeg_android/ffmpeg-android-aarch64-34
+exec_prefix=${prefix}
+libdir=/Users/home/dev/c/ffmpeg_android/ffmpeg-android-aarch64-34/lib
+includedir=/Users/home/dev/c/ffmpeg_android/ffmpeg-android-aarch64-34/include
+
+Name: libpostproc
+Description: FFmpeg postprocessing library
+Version: 58.0.100
+Requires: libavutil >= 59.2.100
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lpostproc -lm -latomic
+Libs.private: 
+Cflags: -I${includedir}
