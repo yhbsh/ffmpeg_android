@@ -5,7 +5,7 @@ includedir=/Users/home/dev/c/ffmpeg_android/ffmpeg-android-aarch64-34/include
 
 Name: libavutil
 Description: FFmpeg utility library
-Version: 59.2.100
+Version: 59.3.100
 Requires: 
 Requires.private: 
 Conflicts:
