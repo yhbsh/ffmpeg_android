@@ -5,8 +5,8 @@ includedir=/Users/home/dev/c/ffmpeg_android/ffmpeg-android-aarch64-34/include
 
 Name: libswscale
 Description: FFmpeg image rescaling library
-Version: 8.0.100
-Requires: libavutil >= 59.2.100
+Version: 8.2.100
+Requires: libavutil >= 59.9.100
 Requires.private: 
 Conflicts:
 Libs: -L${libdir}  -lswscale -lm -latomic

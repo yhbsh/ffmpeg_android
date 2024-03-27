@@ -5,8 +5,8 @@ includedir=/Users/home/dev/c/ffmpeg_android/ffmpeg-android-aarch64-34/include
 
 Name: libavfilter
 Description: FFmpeg audio/video filtering library
-Version: 10.0.100
-Requires: libavutil >= 59.2.100
+Version: 10.2.100
+Requires: libavutil >= 59.9.100
 Requires.private: 
 Conflicts:
 Libs: -L${libdir}  -lavfilter -pthread -lm -latomic
