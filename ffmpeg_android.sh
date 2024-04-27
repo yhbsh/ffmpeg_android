@@ -40,6 +40,7 @@ cd $FFMPEG_SOURCE_DIR
   --enable-swresample \
   --enable-static \
   --enable-mediacodec \
+  --enable-protocol=file \
   --enable-jni \
   --disable-shared \
   --disable-debug \
