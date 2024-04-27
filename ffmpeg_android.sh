@@ -4,7 +4,7 @@ set -xe
 
 TARGET_ARCH="aarch64"
 ANDROID_API_LEVEL=34
-ANDROID_NDK_VERSION=26.2.11394342
+ANDROID_NDK_VERSION=26.3.11579264
 ANDROID_NDK_PATH="$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION"
 SYSROOT="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
 
@@ -39,6 +39,8 @@ cd $FFMPEG_SOURCE_DIR
   --enable-swscale \
   --enable-swresample \
   --enable-static \
+  --enable-mediacodec \
+  --enable-jni \
   --disable-shared \
   --disable-debug \
   --disable-ffplay \
