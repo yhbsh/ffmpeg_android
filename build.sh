@@ -34,7 +34,7 @@ cd $LIBICONV_SOURCE_DIR
   --host="$TARGET_ARCH-linux-android" \
   --prefix="$LIBICONV_BUILD_DIR" \
   --enable-static \
-  --enable-shared \
+  --disable-shared \
   --with-sysroot="$SYSROOT" \
   CC="$CC" \
   CXX="$CXX" \
