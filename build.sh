@@ -16,12 +16,11 @@ LLVM_NM="$TOOLCHAINS/bin/llvm-nm"
 LLVM_RANLIB="$TOOLCHAINS/bin/llvm-ranlib"
 LLVM_STRIP="$TOOLCHAINS/bin/llvm-strip"
 
-CC="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android${API_LEVEL}-clang"
-CXX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android${API_LEVEL}-clang++"
-CFLAGS="-static -Os -fPIC -march=armv8-a -ffunction-sections -fdata-sections"
-LDFLAGS="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$API_LEVEL -lc -Wl,--gc-sections"
-
-
+CROSS_PREFIX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android"
+CC="${CROSS_PREFIX}${API_LEVEL}-clang"
+CXX="${CROSS_PREFIX}${API_LEVEL}-clang++"
+CFLAGS="-O3 -fPIC -march=armv8-a"
+LDFLAGS="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$API_LEVEL -lc -Wl, --verbose"
 
 FFMPEG_SOURCE_DIR="$PWD/ffmpeg-7.0"
 FFMPEG_BUILD_DIR="$PWD/ffmpeg-7.0-android-$TARGET_ARCH-$API_LEVEL"
@@ -38,17 +37,25 @@ cd $FFMPEG_SOURCE_DIR
   --prefix="$FFMPEG_BUILD_DIR" \
   --extra-cflags="$CFLAGS" \
   --extra-ldflags="$LDFLAGS" \
-  --enable-static \
-  --disable-shared \
+  --enable-pic \
+  --enable-neon \
+  --enable-asm \
+  --enable-shared \
+  --disable-static \
   --disable-programs \
   --disable-iconv \
   --disable-debug \
-  --disable-doc \
   --disable-symver \
+  --disable-doc \
+  --disable-htmlpages \
+  --disable-manpages \
+  --disable-podpages \
+  --disable-txtpages \
   --ar="$LLVM_AR" \
   --nm="$LLVM_NM" \
   --ranlib="$LLVM_RANLIB" \
   --strip="$LLVM_STRIP"
 
+make clean
 make -j$(nproc)
 make install -j$(nproc)
