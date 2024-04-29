@@ -5,5 +5,6 @@
 ```bash
 git clone https://github.com/yhbsh/FFmpeg-Android.git ffmpeg_android --recursive
 cd ffmpeg_android
-./ffmpeg_android.sh
+./fetch.sh
+./build.sh
 ```
