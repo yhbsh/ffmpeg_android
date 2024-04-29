@@ -3,34 +3,40 @@
 set -xe
 
 TARGET_ARCH="aarch64"
-ANDROID_API_LEVEL=30
-ANDROID_NDK_VERSION=26.3.11579264
-ANDROID_NDK_PATH="$ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION"
-SYSROOT="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
+API_LEVEL="30"
+NDK_VERSION="26.3.11579264"
 
-LLVM_AR="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar"
-LLVM_NM="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-nm"
-LLVM_RANLIB="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ranlib"
-LLVM_STRIP="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-strip"
+NDK_ROOT="$ANDROID_SDK_ROOT/ndk/$NDK_VERSION"
+TOOLCHAINS="$NDK_ROOT/toolchains/llvm/prebuilt/darwin-x86_64"
+SYSROOT="$TOOLCHAINS/sysroot"
 
-CLANG="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/$TARGET_ARCH-linux-android${ANDROID_API_LEVEL}-clang"
-CLANGXX="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/$TARGET_ARCH-linux-android${ANDROID_API_LEVEL}-clang++"
+LLVM_AR="$TOOLCHAINS/bin/llvm-ar"
+LLVM_NM="$TOOLCHAINS/bin/llvm-nm"
+LLVM_RANLIB="$TOOLCHAINS/bin/llvm-ranlib"
+LLVM_STRIP="$TOOLCHAINS/bin/llvm-strip"
 
-FFMPEG_SOURCE_DIR="$PWD/ffmpeg"
-FFMPEG_BUILD_DIR="$PWD/ffmpeg-android-$TARGET_ARCH-$ANDROID_API_LEVEL"
+CC="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android${API_LEVEL}-clang"
+CXX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android${API_LEVEL}-clang++"
+CFLAGS="-static -Os -fPIC -march=armv8-a -ffunction-sections -fdata-sections"
+LDFALGS="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$API_LEVEL -lc -Wl,--gc-sections"
+
+CROSS_PREFIX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android$API_LEVEL-"
+
+FFMPEG_SOURCE_DIR="$PWD/ffmpeg-7.0"
+FFMPEG_BUILD_DIR="$PWD/ffmpeg-7.0-android-$TARGET_ARCH-$API_LEVEL"
 
 cd $FFMPEG_SOURCE_DIR
 ./configure \
   --target-os=android \
-  --arch=$TARGET_ARCH \
+  --arch="$TARGET_ARCH" \
   --enable-cross-compile \
-  --cross-prefix="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/$TARGET_ARCH-linux-android${ANDROID_API_LEVEL}-" \
-  --cc="$CLANG" \
-  --cxx="$CLANGXX" \
+  --cross-prefix="$CROSS_PREFIX" \
+  --cc="$CC" \
+  --cxx="$CXX" \
   --sysroot="$SYSROOT" \
   --prefix="$FFMPEG_BUILD_DIR" \
-  --extra-cflags="-static -Os -fPIC -march=armv8-a -ffunction-sections -fdata-sections" \
-  --extra-ldflags="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$ANDROID_API_LEVEL -lc -Wl,--gc-sections" \
+  --extra-cflags="$CFLAGS" \
+  --extra-ldflags="$LDFLAGS" \
   --disable-everything \
   --enable-decoder=h264 \
   --enable-decoder=mpeg4 \
@@ -55,3 +61,4 @@ cd $FFMPEG_SOURCE_DIR
 
 make -j$(nproc)
 make install -j$(nproc)
+

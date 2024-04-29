@@ -13,4 +13,3 @@ if [ ! -d libiconv-1.17 ]; then
   tar fvx libiconv-1.17.tar.gz
   rm libiconv-1.17.tar.gz
 fi
-
