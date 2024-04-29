@@ -19,12 +19,33 @@ LLVM_STRIP="$TOOLCHAINS/bin/llvm-strip"
 CC="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android${API_LEVEL}-clang"
 CXX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android${API_LEVEL}-clang++"
 CFLAGS="-static -Os -fPIC -march=armv8-a -ffunction-sections -fdata-sections"
-LDFALGS="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$API_LEVEL -lc -Wl,--gc-sections"
+LDFLAGS="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$API_LEVEL -lc -Wl,--gc-sections"
 
 CROSS_PREFIX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android$API_LEVEL-"
 
 FFMPEG_SOURCE_DIR="$PWD/ffmpeg-7.0"
 FFMPEG_BUILD_DIR="$PWD/ffmpeg-7.0-android-$TARGET_ARCH-$API_LEVEL"
+
+LIBICONV_SOURCE_DIR="$PWD/libiconv-1.17"
+LIBICONV_BUILD_DIR="$PWD/libiconv-1.17-android-$TARGET_ARCH-$API_LEVEL"
+
+cd $LIBICONV_SOURCE_DIR
+./configure \
+  --host="$TARGET_ARCH-linux-android" \
+  --prefix="$LIBICONV_BUILD_DIR" \
+  --enable-static \
+  --enable-shared \
+  --with-sysroot="$SYSROOT" \
+  CC="$CC" \
+  CXX="$CXX" \
+  AR="$LLVM_AR" \
+  NM="$LLVM_NM" \
+  RANLIB="$LLVM_RANLIB" \
+  STRIP="$LLVM_STRIP" \
+  CFLAGS="$CFLAGS" \
+  LDFLAGS="$LDFLAGS"
+make -j$(nproc)
+make install -j$(nproc)
 
 cd $FFMPEG_SOURCE_DIR
 ./configure \
@@ -59,7 +80,5 @@ cd $FFMPEG_SOURCE_DIR
   --nm="$LLVM_NM" \
   --ranlib="$LLVM_RANLIB" \
   --strip="$LLVM_STRIP"
-
 make -j$(nproc)
 make install -j$(nproc)
-
