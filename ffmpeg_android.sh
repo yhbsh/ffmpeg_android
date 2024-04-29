@@ -3,9 +3,9 @@
 set -xe
 
 TARGET_ARCH="aarch64"
-ANDROID_API_LEVEL=33
+ANDROID_API_LEVEL=30
 ANDROID_NDK_VERSION=25.1.8937393
-ANDROID_NDK_PATH="$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION"
+ANDROID_NDK_PATH="$ANDROID_SDK_ROOT/ndk/$ANDROID_NDK_VERSION"
 SYSROOT="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
 
 LLVM_AR="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar"
@@ -15,7 +15,6 @@ LLVM_STRIP="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-st
 
 CLANG="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/$TARGET_ARCH-linux-android${ANDROID_API_LEVEL}-clang"
 CLANGXX="$ANDROID_NDK_PATH/toolchains/llvm/prebuilt/darwin-x86_64/bin/$TARGET_ARCH-linux-android${ANDROID_API_LEVEL}-clang++"
-
 
 FFMPEG_SOURCE_DIR="$PWD/ffmpeg"
 FFMPEG_BUILD_DIR="$PWD/ffmpeg-android-$TARGET_ARCH-$ANDROID_API_LEVEL"
@@ -30,22 +29,22 @@ cd $FFMPEG_SOURCE_DIR
   --cxx="$CLANGXX" \
   --sysroot="$SYSROOT" \
   --prefix="$FFMPEG_BUILD_DIR" \
-  --extra-cflags="-static -Os -fPIC -march=armv8-a" \
-  --extra-ldflags="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$ANDROID_API_LEVEL -lc" \
+  --extra-cflags="-static -Os -fPIC -march=armv8-a -ffunction-sections -fdata-sections" \
+  --extra-ldflags="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$ANDROID_API_LEVEL -lc -Wl,--gc-sections" \
   --disable-everything \
+  --enable-decoder=h264 \
+  --enable-decoder=mpeg4 \
+  --enable-parser=h264 \
+  --enable-parser=mpeg4 \
+  --enable-demuxer=mov \
+  --enable-demuxer=mpegvideo \
+  --enable-protocol=file \
   --enable-avcodec \
   --enable-avformat \
   --enable-avutil \
-  --enable-swscale \
-  --enable-swresample \
   --enable-static \
-  --enable-mediacodec \
-  --enable-protocol=file \
-  --enable-jni \
   --disable-shared \
   --disable-debug \
-  --disable-ffplay \
-  --disable-ffprobe \
   --disable-doc \
   --disable-symver \
   --enable-gpl \
@@ -54,5 +53,5 @@ cd $FFMPEG_SOURCE_DIR
   --ranlib="$LLVM_RANLIB" \
   --strip="$LLVM_STRIP"
 
-make -j
-make install -j
+make -j$(nproc)
+make install -j$(nproc)
