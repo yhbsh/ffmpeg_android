@@ -15,11 +15,12 @@ LLVM_AR="$TOOLCHAINS/bin/llvm-ar"
 LLVM_NM="$TOOLCHAINS/bin/llvm-nm"
 LLVM_RANLIB="$TOOLCHAINS/bin/llvm-ranlib"
 LLVM_STRIP="$TOOLCHAINS/bin/llvm-strip"
+YASM="$TOOCHAINS/bin/yasm"
 
 CROSS_PREFIX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android"
 CC="${CROSS_PREFIX}${API_LEVEL}-clang"
 CXX="${CROSS_PREFIX}${API_LEVEL}-clang++"
-CFLAGS="-O3 -fPIC -march=armv8-a"
+CFLAGS="-fPIC -Wl,-Bsymbolic -Os -fPIE -pie -static -fPIC"
 LDFLAGS="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$API_LEVEL -lc -Wl, --verbose"
 
 FFMPEG_SOURCE_DIR="$PWD/ffmpeg-7.0"
@@ -27,26 +28,29 @@ FFMPEG_BUILD_DIR="$PWD/ffmpeg-7.0-android-$TARGET_ARCH-$API_LEVEL"
 
 cd $FFMPEG_SOURCE_DIR
 ./configure \
-  --target-os=android \
-  --arch="$TARGET_ARCH" \
-  --enable-cross-compile \
-  --cross-prefix="$CROSS_PREFIX" \
   --cc="$CC" \
   --cxx="$CXX" \
-  --sysroot="$SYSROOT" \
+  --arch="$TARGET_ARCH" \
+  --target-os=android \
+  --yasmexe=$NDK/prebuilt/darwin-x86_64/bin/yasm \
   --prefix="$FFMPEG_BUILD_DIR" \
+  --cross-prefix="$CROSS_PREFIX" \
+  --sysroot="$SYSROOT" \
   --extra-cflags="$CFLAGS" \
   --extra-ldflags="$LDFLAGS" \
   --enable-pic \
+  --enable-cross-compile \
   --enable-neon \
   --enable-asm \
-  --enable-shared \
-  --disable-static \
+  --enable-static \
+  --enable-inline-asm \
+  --disable-shared \
   --disable-programs \
   --disable-iconv \
   --disable-debug \
   --disable-symver \
   --disable-doc \
+  --disable-avx \
   --disable-htmlpages \
   --disable-manpages \
   --disable-podpages \
