@@ -23,8 +23,8 @@ CXX="${CROSS_PREFIX}${API_LEVEL}-clang++"
 CFLAGS="-fPIC -Wl,-Bsymbolic -Os -fPIE -pie -static -fPIC"
 LDFLAGS="-L$SYSROOT/usr/lib/$TARGET_ARCH-linux-android/$API_LEVEL -lc -Wl, --verbose"
 
-FFMPEG_SOURCE_DIR="$PWD/ffmpeg-7.0"
-FFMPEG_BUILD_DIR="$PWD/ffmpeg-7.0-android-$TARGET_ARCH-$API_LEVEL"
+FFMPEG_SOURCE_DIR="$PWD/ffmpeg"
+FFMPEG_BUILD_DIR="$PWD/ffmpeg-android-$TARGET_ARCH-$API_LEVEL"
 
 cd $FFMPEG_SOURCE_DIR
 ./configure \
