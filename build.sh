@@ -19,7 +19,6 @@ LLVM_STRIP="$TOOLCHAINS/bin/llvm-strip"
 CROSS_PREFIX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android"
 CC="${CROSS_PREFIX}${API_LEVEL}-clang"
 CXX="${CROSS_PREFIX}${API_LEVEL}-clang++"
-CFLAGS="-Os -fPIC -ffunction-sections -fdata-sections"
 
 FFMPEG_SOURCE_DIR="$PWD/ffmpeg"
 FFMPEG_BUILD_DIR="$PWD/ffmpeg-android-$TARGET_ARCH-$API_LEVEL"
@@ -39,32 +38,13 @@ cd "$FFMPEG_SOURCE_DIR"
   --nm="$LLVM_NM" \
   --ranlib="$LLVM_RANLIB" \
   --strip="$LLVM_STRIP" \
-  --enable-cross-compile \
-  --enable-pic \
-  --enable-static \
-  --enable-small \
-  --disable-shared \
-  --disable-doc \
   --disable-debug \
-  --disable-symver \
-  --disable-encoders \
-  --disable-decoders \
-  --disable-muxers \
-  --disable-demuxers \
-  --disable-protocols \
-  --disable-filters \
-  --disable-avdevice \
-  --disable-avformat \
-  --disable-swscale \
-  --disable-avfilter \
-  --disable-postproc \
-  --disable-everything \
-  --enable-decoder=h264 \
-  --enable-decoder=aac \
-  --enable-decoder=mpeg4 \
-  --enable-parser=aac \
-  --enable-parser=h264 \
-  --extra-cflags="$CFLAGS" \
+  --disable-static \
+  --enable-shared \
+  --enable-cross-compile \
+  --enable-mediacodec \
+  --enable-jni \
+  --enable-neon
 
 read -p "Compile FFmpeg? (y/N): " confirm
 if [[ $confirm != [yY] ]]; then
