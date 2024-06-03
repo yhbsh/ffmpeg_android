@@ -38,13 +38,21 @@ cd "$FFMPEG_SOURCE_DIR"
   --nm="$LLVM_NM" \
   --ranlib="$LLVM_RANLIB" \
   --strip="$LLVM_STRIP" \
+  --pkg-config="pkg-config" \
   --disable-debug \
-  --disable-static \
-  --enable-shared \
+  --disable-shared \
+  --disable-asm \
+  --enable-pic \
+  --enable-static \
   --enable-cross-compile \
   --enable-mediacodec \
   --enable-jni \
-  --enable-neon
+  --enable-neon \
+  --enable-indev=android_camera \
+  --host-cflags="-fPIC" \
+  --extra-cflags="-fPIC" \
+  --host-ldflags="-fPIC" \
+  --extra-ldflags="-fPIC"
 
 read -p "Compile FFmpeg? (y/N): " confirm
 if [[ $confirm != [yY] ]]; then
