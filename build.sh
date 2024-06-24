@@ -19,8 +19,6 @@ LLVM_STRIP="$TOOLCHAINS/bin/llvm-strip"
 CROSS_PREFIX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android"
 CC="${CROSS_PREFIX}${API_LEVEL}-clang"
 CXX="${CROSS_PREFIX}${API_LEVEL}-clang++"
-CFLAGS="-Os -fPIC -ffunction-sections -fdata-sections"
-LDFLAGS="-fPIC"
 
 FFMPEG_SOURCE_DIR="$PWD/ffmpeg-7.0.1"
 FFMPEG_BUILD_DIR="$PWD/ffmpeg-android-$TARGET_ARCH-$API_LEVEL"
@@ -52,7 +50,6 @@ cd "$FFMPEG_SOURCE_DIR"
   --disable-programs                                                                                            \
   --disable-logging                                                                                             \
   --disable-doc                                                                                                 \
-  --disable-avdevice                                                                                            \
   --disable-avfilter                                                                                            \
   --disable-swscale                                                                                             \
   --disable-swresample                                                                                          \
@@ -65,14 +62,16 @@ cd "$FFMPEG_SOURCE_DIR"
   --disable-hwaccels                                                                                            \
   --disable-hwaccels                                                                                            \
   --disable-protocols                                                                                           \
+  --disable-indevs                                                                                              \
+  --disable-outdevs                                                                                             \
   --enable-protocol='file,pipe'                                                                                 \
   --enable-mediacodec                                                                                           \
   --enable-jni                                                                                                  \
   --enable-demuxer='mov'                                                                                        \
   --enable-parser='aac,h264'                                                                                    \
   --enable-decoder='aac,h264,h264_mediacodec'                                                                   \
-  --extra-cflags="$CFLAGS"                                                                                      \
-  --extra-ldflags="$LDFLAGS"                                                                                    \
+  --enable-indev='android_camera'                                                                               \
+  --extra-cflags="-Os -fPIC -ffunction-sections -fdata-sections"                                                \
 
 read -p "Compile FFmpeg? (y/N): " confirm
 if [[ $confirm != [yY] ]]; then
