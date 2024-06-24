@@ -20,51 +20,59 @@ CROSS_PREFIX="$TOOLCHAINS/bin/$TARGET_ARCH-linux-android"
 CC="${CROSS_PREFIX}${API_LEVEL}-clang"
 CXX="${CROSS_PREFIX}${API_LEVEL}-clang++"
 CFLAGS="-Os -fPIC -ffunction-sections -fdata-sections"
+LDFLAGS="-fPIC"
 
-FFMPEG_SOURCE_DIR="$PWD/ffmpeg"
+FFMPEG_SOURCE_DIR="$PWD/ffmpeg-7.0.1"
 FFMPEG_BUILD_DIR="$PWD/ffmpeg-android-$TARGET_ARCH-$API_LEVEL"
 
 mkdir -p "$FFMPEG_BUILD_DIR"
 
 cd "$FFMPEG_SOURCE_DIR"
 ./configure \
-  --prefix="$FFMPEG_BUILD_DIR" \
-  --target-os=android \
-  --arch="$TARGET_ARCH" \
-  --cross-prefix="$CROSS_PREFIX" \
-  --sysroot="$SYSROOT" \
-  --cc="$CC" \
-  --cxx="$CXX" \
-  --ar="$LLVM_AR" \
-  --nm="$LLVM_NM" \
-  --ranlib="$LLVM_RANLIB" \
-  --strip="$LLVM_STRIP" \
-  --enable-cross-compile \
-  --enable-pic \
-  --enable-static \
-  --enable-small \
-  --disable-shared \
-  --disable-doc \
-  --disable-debug \
-  --disable-symver \
-  --disable-encoders \
-  --disable-decoders \
-  --disable-muxers \
-  --disable-demuxers \
-  --disable-protocols \
-  --disable-filters \
-  --disable-avdevice \
-  --disable-avformat \
-  --disable-swscale \
-  --disable-avfilter \
-  --disable-postproc \
-  --disable-everything \
-  --enable-decoder=h264 \
-  --enable-decoder=aac \
-  --enable-decoder=mpeg4 \
-  --enable-parser=aac \
-  --enable-parser=h264 \
-  --extra-cflags="$CFLAGS" \
+  --prefix="$FFMPEG_BUILD_DIR"                                                                                   \
+  --enable-cross-compile                                                                                         \
+  --cross-prefix="$CROSS_PREFIX"                                                                                 \
+  --target-os=android                                                                                            \
+  --arch="$TARGET_ARCH"                                                                                          \
+  --sysroot="$SYSROOT"                                                                                           \
+  --cc="$CC"                                                                                                     \
+  --cxx="$CXX"                                                                                                   \
+  --ar="$LLVM_AR"                                                                                                \
+  --nm="$LLVM_NM"                                                                                                \
+  --ranlib="$LLVM_RANLIB"                                                                                        \
+  --strip="$LLVM_STRIP"                                                                                          \
+  --pkg-config=pkg-config                                                                                        \
+  --stdc=c11                                                                                                     \
+  --enable-pic                                                                                                   \
+  --enable-static                                                                                                \
+  --enable-small                                                                                                 \
+  --disable-autodetect                                                                                           \
+  --disable-shared                                                                                               \
+  --disable-debug                                                                                                \
+  --disable-programs                                                                                             \
+  --disable-logging                                                                                              \
+  --disable-doc                                                                                                  \
+  --disable-avdevice                                                                                             \
+  --disable-avfilter                                                                                             \
+  --disable-swscale                                                                                              \
+  --disable-swresample                                                                                           \
+  --disable-decoders                                                                                             \
+  --disable-encoders                                                                                             \
+  --disable-bsfs                                                                                                 \
+  --disable-muxers                                                                                               \
+  --disable-demuxers                                                                                             \
+  --disable-parsers                                                                                              \
+  --disable-hwaccels                                                                                             \
+  --disable-hwaccels                                                                                             \
+  --disable-protocols                                                                                            \
+  --enable-protocol='file,pipe'                                                                                  \
+  --enable-mediacodec                                                                                            \
+  --enable-jni                                                                                                   \
+  --enable-demuxer='mov'                                                                                         \
+  --enable-parser='aac,h264'                                                                                     \
+  --enable-decoder='aac,h264,h264_mediacodec'                                                                    \
+  --extra-cflags="$CFLAGS"                                                                                       \
+  --extra-ldflags="$LDFLAGS"
 
 read -p "Compile FFmpeg? (y/N): " confirm
 if [[ $confirm != [yY] ]]; then
@@ -73,6 +81,6 @@ if [[ $confirm != [yY] ]]; then
 fi
 
 make clean
-make install -j
+make V=1 install
 
 echo "FFmpeg compilation completed successfully."
