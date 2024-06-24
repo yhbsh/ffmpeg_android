@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
+set -xe
 
-set -e
+FFMPEG_VERSION="7.0.1"
+FFMPEG_ARCHIVE="ffmpeg-${FFMPEG_VERSION}.tar.xz"
+FFMPEG_FOLDER="ffmpeg-${FFMPEG_VERSION}"
 
-git clone https://git.ffmpeg.org/ffmpeg.git --depth 1 --branch master ffmpeg
+if [ ! -f "$FFMPEG_ARCHIVE" ] && [ ! -d "$FFMPEG_FOLDER" ]; then
+    wget "https://ffmpeg.org/releases/${FFMPEG_ARCHIVE}"
+    tar fvx "$FFMPEG_ARCHIVE"
+    rm "$FFMPEG_ARCHIVE"
+fi
