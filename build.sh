@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -xe
 
 TARGET_ARCH="aarch64"
 API_LEVEL="34"
@@ -27,51 +27,59 @@ mkdir -p "$FFMPEG_BUILD_DIR"
 
 cd "$FFMPEG_SOURCE_DIR"
 ./configure \
-  --prefix="$FFMPEG_BUILD_DIR"                                                                                  \
-  --enable-cross-compile                                                                                        \
-  --cross-prefix="$CROSS_PREFIX"                                                                                \
-  --target-os=android                                                                                           \
-  --arch="$TARGET_ARCH"                                                                                         \
-  --sysroot="$SYSROOT"                                                                                          \
-  --cc="$CC"                                                                                                    \
-  --cxx="$CXX"                                                                                                  \
-  --ar="$LLVM_AR"                                                                                               \
-  --nm="$LLVM_NM"                                                                                               \
-  --ranlib="$LLVM_RANLIB"                                                                                       \
-  --strip="$LLVM_STRIP"                                                                                         \
-  --pkg-config=pkg-config                                                                                       \
-  --stdc=c11                                                                                                    \
-  --enable-pic                                                                                                  \
-  --enable-static                                                                                               \
-  --enable-small                                                                                                \
-  --disable-autodetect                                                                                          \
-  --disable-shared                                                                                              \
-  --disable-debug                                                                                               \
-  --disable-programs                                                                                            \
-  --disable-logging                                                                                             \
-  --disable-doc                                                                                                 \
-  --disable-avfilter                                                                                            \
-  --disable-swscale                                                                                             \
-  --disable-swresample                                                                                          \
-  --disable-decoders                                                                                            \
-  --disable-encoders                                                                                            \
-  --disable-bsfs                                                                                                \
-  --disable-muxers                                                                                              \
-  --disable-demuxers                                                                                            \
-  --disable-parsers                                                                                             \
-  --disable-hwaccels                                                                                            \
-  --disable-hwaccels                                                                                            \
-  --disable-protocols                                                                                           \
-  --disable-indevs                                                                                              \
-  --disable-outdevs                                                                                             \
-  --enable-protocol='file,pipe'                                                                                 \
-  --enable-mediacodec                                                                                           \
-  --enable-jni                                                                                                  \
-  --enable-demuxer='mov'                                                                                        \
-  --enable-parser='aac,h264'                                                                                    \
-  --enable-decoder='aac,h264,h264_mediacodec'                                                                   \
-  --enable-indev='android_camera'                                                                               \
-  --extra-cflags="-Os -fPIC -ffunction-sections -fdata-sections"                                                \
+  --prefix="$FFMPEG_BUILD_DIR"                                                                                      \
+  --enable-cross-compile                                                                                            \
+  --cross-prefix="$CROSS_PREFIX"                                                                                    \
+  --target-os=android                                                                                               \
+  --arch="$TARGET_ARCH"                                                                                             \
+  --sysroot="$SYSROOT"                                                                                              \
+  --stdc=c11                                                                                                        \
+  --cc="$CC"                                                                                                        \
+  --cxx="$CXX"                                                                                                      \
+  --ar="$LLVM_AR"                                                                                                   \
+  --nm="$LLVM_NM"                                                                                                   \
+  --ranlib="$LLVM_RANLIB"                                                                                           \
+  --strip="$LLVM_STRIP"                                                                                             \
+  --pkg-config=pkg-config                                                                                           \
+  --disable-armv5te                                                                                                 \
+  --disable-armv6                                                                                                   \
+  --disable-armv6t2                                                                                                 \
+  --enable-pic                                                                                                      \
+  --enable-static                                                                                                   \
+  --enable-small                                                                                                    \
+  --enable-lto                                                                                                      \
+  --disable-autodetect                                                                                              \
+  --disable-shared                                                                                                  \
+  --disable-debug                                                                                                   \
+  --disable-programs                                                                                                \
+  --disable-logging                                                                                                 \
+  --disable-doc                                                                                                     \
+  --disable-everything                                                                                              \
+  --disable-network                                                                                                 \
+  --disable-zlib                                                                                                    \
+  --disable-avfilter                                                                                                \
+  --disable-swscale                                                                                                 \
+  --disable-swresample                                                                                              \
+  --disable-decoders                                                                                                \
+  --disable-encoders                                                                                                \
+  --disable-bsfs                                                                                                    \
+  --disable-muxers                                                                                                  \
+  --disable-demuxers                                                                                                \
+  --disable-parsers                                                                                                 \
+  --disable-hwaccels                                                                                                \
+  --disable-hwaccels                                                                                                \
+  --disable-protocols                                                                                               \
+  --disable-indevs                                                                                                  \
+  --disable-outdevs                                                                                                 \
+  --enable-mediacodec                                                                                               \
+  --enable-jni                                                                                                      \
+  --enable-protocol='file,pipe'                                                                                     \
+  --enable-demuxer='mov'                                                                                            \
+  --enable-parser='aac,h264'                                                                                        \
+  --enable-decoder='aac,h264,h264_mediacodec'                                                                       \
+  --enable-indev='android_camera'                                                                                   \
+  --extra-cflags="-Os -fPIC -ffunction-sections -fdata-sections -fno-unwind-tables -fno-asynchronous-unwind-tables" \
+  --extra-ldflags="-Wl,--gc-sections"                                                                               \
 
 read -p "Compile FFmpeg? (y/N): " confirm
 if [[ $confirm != [yY] ]]; then
