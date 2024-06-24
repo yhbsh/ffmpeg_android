@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exuo pipefail
+set -e
 
 TARGET_ARCH="aarch64"
 API_LEVEL="34"
@@ -79,7 +79,6 @@ if [[ $confirm != [yY] ]]; then
   exit 1
 fi
 
-make clean
 make V=1 install
 
 echo "FFmpeg compilation completed successfully."
