@@ -54,7 +54,6 @@ cd "$FFMPEG_SOURCE_DIR"
     --disable-logging                                                                                                 \
     --disable-doc                                                                                                     \
     --disable-everything                                                                                              \
-    --disable-network                                                                                                 \
     --disable-zlib                                                                                                    \
     --disable-avfilter                                                                                                \
     --disable-swscale                                                                                                 \
@@ -66,17 +65,20 @@ cd "$FFMPEG_SOURCE_DIR"
     --disable-demuxers                                                                                                \
     --disable-parsers                                                                                                 \
     --disable-hwaccels                                                                                                \
-    --disable-hwaccels                                                                                                \
     --disable-protocols                                                                                               \
     --disable-indevs                                                                                                  \
     --disable-outdevs                                                                                                 \
     --enable-mediacodec                                                                                               \
     --enable-jni                                                                                                      \
-    --enable-protocol='file,pipe'                                                                                     \
-    --enable-demuxer='mov'                                                                                            \
-    --enable-parser='aac,h264'                                                                                        \
-    --enable-decoder='aac,h264,h264_mediacodec'                                                                       \
-    --enable-indev='android_camera'                                                                                   \
+    --enable-protocol=udp,tcp,http,rtmp                                                                               \
+    --enable-demuxer=mov                                                                                              \
+    --enable-parser=h264                                                                                              \
+    --enable-decoder=h264,h264_mediacodec                                                                             \
+    --enable-indev=android_camera                                                                                     \
+
+{ set +xe; } 2>/dev/null
+read -n 1 -s
+set -xe
 
 make -j100
 make install
