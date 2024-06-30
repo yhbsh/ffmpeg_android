@@ -44,10 +44,9 @@ cd "$FFMPEG_SOURCE_DIR"
     --disable-armv5te                                                                                                 \
     --disable-armv6                                                                                                   \
     --disable-armv6t2                                                                                                 \
-    --enable-pic                                                                                                      \
-    --enable-static                                                                                                   \
-    --enable-small                                                                                                    \
     --enable-lto                                                                                                      \
+    --enable-pic                                                                                                      \
+    --enable-small                                                                                                    \
     --disable-autodetect                                                                                              \
     --disable-shared                                                                                                  \
     --disable-debug                                                                                                   \
@@ -78,15 +77,6 @@ cd "$FFMPEG_SOURCE_DIR"
     --enable-parser='aac,h264'                                                                                        \
     --enable-decoder='aac,h264,h264_mediacodec'                                                                       \
     --enable-indev='android_camera'                                                                                   \
-    --extra-cflags="-Os -fPIC -ffunction-sections -fdata-sections -fno-unwind-tables -fno-asynchronous-unwind-tables" \
-    --extra-ldflags="-Wl,--gc-sections"                                                                               \
 
-read -p "Compile FFmpeg? (y/N): " confirm
-if [[ $confirm != [yY] ]]; then
-  echo "Compilation aborted."
-  exit 1
-fi
-
-make V=1 install
-
-echo "FFmpeg compilation completed successfully."
+make -j100
+make install
