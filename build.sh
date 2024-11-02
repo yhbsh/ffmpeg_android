@@ -40,3 +40,6 @@ cd ffmpeg-7.0.1
 --enable-swscale \
 --enable-protocol=http \
 --enable-demuxer=mov \
+
+
+make -j13
